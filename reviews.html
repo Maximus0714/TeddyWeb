@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Read and leave reviews for TedBud teddy bears.">
+    <title>Reviews | TedBud</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <header id="header" class="header header-visible solid-header">
+        <div class="container header-container">
+            <a href="index.html" class="logo">TedBud.</a>
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li><a href="index.html#features" class="nav-link">Craftsmanship</a></li>
+                    <li><a href="index.html#testimonials" class="nav-link">Stores</a></li>
+                    <!-- Auth State UI -->
+                    <li class="auth-unauthenticated"><a href="login.html" class="button button-secondary">Login</a></li>
+                    <li class="auth-unauthenticated"><a href="register.html" class="button button-primary">Register</a></li>
+
+                    <!-- Authenticated Dropdown -->
+                    <li class="auth-authenticated profile-dropdown-container"
+                        style="display: none; position: relative;">
+                        <button class="button button-secondary profile-btn" id="nav-user-btn"
+                            style="display: flex; align-items: center; gap: 8px; padding-right: 16px;">
+                            <span id="nav-user-name">Profile</span>
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M6 9l6 6 6-6" />
+                            </svg>
+                        </button>
+                        <div class="profile-dropdown-content"
+                            style="display: none; position: absolute; top: 110%; right: 0; background: var(--color-dark-lighter); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--border-radius); padding: var(--spacing-xs); min-width: 150px; flex-direction: column; gap: 4px; z-index: 100;">
+                            <button id="logout-btn" class="button button-secondary"
+                                style="width: 100%; text-align: left; border: none; padding: 8px 16px;">Logout</button>
+                        </div>
+                    </li>
+
+                    <!-- Cart Icon -->
+                    <li>
+                        <a href="cart.html" class="nav-link cart-link"
+                            style="display: flex; align-items: center; gap: 8px;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="9" cy="21" r="1"></circle>
+                                <circle cx="20" cy="21" r="1"></circle>
+                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                            </svg>
+                            <span class="cart-count"
+                                style="background: var(--color-orange); color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: bold;">0</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="reviews-page">
+        <div class="container">
+            <!-- Page Header -->
+            <section class="reviews-hero">
+                <h1 class="reviews-hero-title">What Our <span class="text-gradient">Buddies</span> Say</h1>
+                <p class="reviews-hero-subtitle">Real stories from real TedBud owners. Share yours too!</p>
+            </section>
+
+            <!-- Stats Summary -->
+            <section class="reviews-stats-bar" id="reviews-stats-bar">
+                <div class="stat-item">
+                    <span class="stat-value" id="stat-avg-rating">—</span>
+                    <span class="stat-label">Average Rating</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-value" id="stat-total-reviews">0</span>
+                    <span class="stat-label">Total Reviews</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-value" id="stat-five-star">0%</span>
+                    <span class="stat-label">5-Star Reviews</span>
+                </div>
+            </section>
+
+            <!-- Write a Review Form -->
+            <section class="review-form-section" id="review-form-section">
+                <div class="review-form-card">
+                    <h2 class="review-form-title">Leave a Review</h2>
+                    <p class="review-form-subtitle">You must be logged in to submit a review.</p>
+
+                    <form id="review-form" class="review-form">
+                        <div class="form-group">
+                            <label class="form-label">Your Rating</label>
+                            <div class="star-rating-input" id="star-rating-input">
+                                <button type="button" class="star-btn" data-value="1" aria-label="Rate 1 star">
+                                    <svg viewBox="0 0 24 24" width="32" height="32"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                </button>
+                                <button type="button" class="star-btn" data-value="2" aria-label="Rate 2 stars">
+                                    <svg viewBox="0 0 24 24" width="32" height="32"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                </button>
+                                <button type="button" class="star-btn" data-value="3" aria-label="Rate 3 stars">
+                                    <svg viewBox="0 0 24 24" width="32" height="32"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                </button>
+                                <button type="button" class="star-btn" data-value="4" aria-label="Rate 4 stars">
+                                    <svg viewBox="0 0 24 24" width="32" height="32"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                </button>
+                                <button type="button" class="star-btn" data-value="5" aria-label="Rate 5 stars">
+                                    <svg viewBox="0 0 24 24" width="32" height="32"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                </button>
+                                <span class="star-rating-label" id="star-rating-label">Select a rating</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="review-comment" class="form-label">Your Review</label>
+                            <textarea id="review-comment" name="comment" class="form-input review-textarea"
+                                placeholder="Tell us about your experience with TedBud..." rows="4" required></textarea>
+                        </div>
+
+                        <button type="submit" id="submit-review-btn" class="button button-primary big-btn full-width" style="position: relative; z-index: 10; cursor: pointer;">Submit Review</button>
+
+                        <p id="review-form-msg" class="review-form-msg"></p>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Reviews List -->
+            <section class="reviews-list-section">
+                <h2 class="reviews-list-title">All Reviews</h2>
+                <div class="reviews-list" id="reviews-list">
+                    <p class="reviews-loading" id="reviews-loading">Loading reviews...</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-col">
+                <a href="index.html" class="logo footer-logo">TedBud.</a>
+                <p>Bringing warmth, one hug at a time.</p>
+            </div>
+            <div class="footer-links">
+                <a href="shop.html">Shop</a>
+                <a href="about.html">About</a>
+                <a href="care-guide.html">Care Guide</a>
+                <a href="contact.html">Contact</a>
+                <a href="reviews.html">Reviews</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span id="year">2026</span> TedBud Co. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script type="module">
+        import { supabase } from './supabase-config.js';
+
+        // --- Helper to get user display name ---
+        async function getUserDisplayName(user) {
+            if (user?.user_metadata?.full_name) {
+                return user.user_metadata.full_name;
+            }
+            try {
+                const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('full_name')
+                    .eq('id', user.id)
+                    .single();
+                if (profile?.full_name) return profile.full_name;
+            } catch (e) {
+                console.log('Could not fetch profile:', e);
+            }
+            return user?.email?.split('@')[0] || 'Buddy';
+        }
+
+        // --- Auth State UI ---
+        async function updateAuthUI(session) {
+            const unauthElements = document.querySelectorAll('.auth-unauthenticated');
+            const authElements = document.querySelectorAll('.auth-authenticated');
+            const userNameDisplays = document.querySelectorAll('#nav-user-name');
+            const formSubtitle = document.querySelector('.review-form-subtitle');
+
+            if (session) {
+                unauthElements.forEach(el => el.style.display = 'none');
+                authElements.forEach(el => el.style.display = 'inline-block');
+                const { data: { user } } = await supabase.auth.getUser();
+                const fullName = await getUserDisplayName(user);
+                userNameDisplays.forEach(el => el.textContent = fullName);
+                if (formSubtitle) formSubtitle.textContent = `Reviewing as ${fullName}`;
+            } else {
+                unauthElements.forEach(el => el.style.display = 'inline-block');
+                authElements.forEach(el => el.style.display = 'none');
+                if (formSubtitle) formSubtitle.textContent = 'You must be logged in to submit a review.';
+            }
+        }
+
+        // ============================================
+        // ATTACH ALL EVENT LISTENERS IMMEDIATELY
+        // (Module scripts are deferred, so DOM is ready)
+        // ============================================
+
+        // --- Star Rating Input ---
+        let selectedRating = 0;
+        const starBtns = document.querySelectorAll('.star-btn');
+        const starLabel = document.getElementById('star-rating-label');
+        const ratingLabels = ['', 'Poor', 'Fair', 'Good', 'Very Good', 'Excellent!'];
+
+        starBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                selectedRating = parseInt(btn.dataset.value);
+                starBtns.forEach((b, i) => {
+                    b.classList.toggle('active', i < selectedRating);
+                });
+                if (starLabel) starLabel.textContent = ratingLabels[selectedRating];
+            });
+
+            btn.addEventListener('mouseenter', () => {
+                const hoverVal = parseInt(btn.dataset.value);
+                starBtns.forEach((b, i) => {
+                    b.classList.toggle('hover', i < hoverVal);
+                });
+            });
+
+            btn.addEventListener('mouseleave', () => {
+                starBtns.forEach(b => b.classList.remove('hover'));
+            });
+        });
+
+        // --- Profile Dropdown ---
+        document.querySelectorAll('.profile-dropdown-container').forEach(container => {
+            const btn = container.querySelector('.profile-btn');
+            const content = container.querySelector('.profile-dropdown-content');
+            if (btn && content) {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    content.classList.toggle('show');
+                });
+            }
+        });
+        document.addEventListener('click', () => {
+            document.querySelectorAll('.profile-dropdown-content.show').forEach(c => c.classList.remove('show'));
+        });
+
+        // --- Logout ---
+        document.querySelectorAll('#logout-btn').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                await supabase.auth.signOut();
+                window.location.href = 'index.html';
+            });
+        });
+
+        // --- Submit Review Form ---
+        const reviewForm = document.getElementById('review-form');
+        if (reviewForm) {
+            reviewForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                console.log('Form submit triggered!');
+
+                const msgEl = document.getElementById('review-form-msg');
+                const comment = document.getElementById('review-comment').value.trim();
+                const btn = document.getElementById('submit-review-btn');
+
+                // Validate session
+                const { data: { session } } = await supabase.auth.getSession();
+                if (!session) {
+                    msgEl.style.display = 'block';
+                    msgEl.style.color = '#ff4d4f';
+                    msgEl.textContent = 'Please log in to submit a review.';
+                    return;
+                }
+
+                if (selectedRating === 0) {
+                    msgEl.style.display = 'block';
+                    msgEl.style.color = '#ff4d4f';
+                    msgEl.textContent = 'Please select a star rating.';
+                    return;
+                }
+
+                if (!comment) {
+                    msgEl.style.display = 'block';
+                    msgEl.style.color = '#ff4d4f';
+                    msgEl.textContent = 'Please write a comment.';
+                    return;
+                }
+
+                btn.textContent = 'Submitting...';
+                btn.disabled = true;
+                btn.style.opacity = '0.8';
+
+                try {
+                    const { data: { user } } = await supabase.auth.getUser();
+                    const reviewerName = await getUserDisplayName(user);
+
+                    console.log('Submitting review:', { user_id: user.id, reviewerName, rating: selectedRating, comment });
+
+                    const { data, error } = await supabase.from('reviews').insert({
+                        user_id: user.id,
+                        reviewer_name: reviewerName,
+                        rating: selectedRating,
+                        comment: comment,
+                    });
+
+                    console.log('Insert result:', { data, error });
+
+                    btn.textContent = 'Submit Review';
+                    btn.disabled = false;
+                    btn.style.opacity = '1';
+
+                    if (error) {
+                        msgEl.style.display = 'block';
+                        msgEl.style.color = '#ff4d4f';
+                        if (error.code === '42P01') {
+                            msgEl.textContent = 'Error: The reviews table has not been created yet. Please run the SQL in Supabase.';
+                        } else {
+                            msgEl.textContent = `Error: ${error.message}`;
+                        }
+                        console.error('Review insert error:', error);
+                    } else {
+                        window.location.href = 'review-thankyou.html';
+                    }
+                } catch (err) {
+                    console.error('Unexpected error:', err);
+                    btn.textContent = 'Submit Review';
+                    btn.disabled = false;
+                    btn.style.opacity = '1';
+                    msgEl.style.display = 'block';
+                    msgEl.style.color = '#ff4d4f';
+                    msgEl.textContent = `Unexpected error: ${err.message}`;
+                }
+            });
+        }
+
+        // ============================================
+        // ASYNC INIT (runs after listeners are ready)
+        // ============================================
+
+        // Load auth state
+        const { data: { session: initialSession } } = await supabase.auth.getSession();
+        await updateAuthUI(initialSession);
+        supabase.auth.onAuthStateChange((_event, session) => updateAuthUI(session));
+
+        // Load existing reviews
+        async function loadReviews() {
+            const listEl = document.getElementById('reviews-list');
+            const loadingEl = document.getElementById('reviews-loading');
+
+            const { data: reviews, error } = await supabase
+                .from('reviews')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (loadingEl) loadingEl.style.display = 'none';
+
+            if (error) {
+                console.error('Load reviews error:', error);
+                if (error.code === '42P01') {
+                    listEl.innerHTML = '<p style="color: var(--color-orange); text-align: center;">The reviews table hasn\'t been created yet.<br>Run the SQL in your Supabase Dashboard to set it up!</p>';
+                } else {
+                    listEl.innerHTML = '<p style="color: #ff4d4f;">Failed to load reviews.</p>';
+                }
+                return;
+            }
+
+            if (!reviews || reviews.length === 0) {
+                listEl.innerHTML = '<p class="no-reviews">No reviews yet. Be the first to share your experience!</p>';
+                return;
+            }
+
+            const totalReviews = reviews.length;
+            const avgRating = (reviews.reduce((sum, r) => sum + r.rating, 0) / totalReviews).toFixed(1);
+            const fiveStarCount = reviews.filter(r => r.rating === 5).length;
+            const fiveStarPct = Math.round((fiveStarCount / totalReviews) * 100);
+
+            document.getElementById('stat-avg-rating').textContent = `⭐ ${avgRating}`;
+            document.getElementById('stat-total-reviews').textContent = totalReviews;
+            document.getElementById('stat-five-star').textContent = `${fiveStarPct}%`;
+
+            listEl.innerHTML = reviews.map(review => {
+                const stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
+                const date = new Date(review.created_at).toLocaleDateString('en-US', {
+                    year: 'numeric', month: 'short', day: 'numeric'
+                });
+                return `
+                    <article class="review-card">
+                        <div class="review-card-header">
+                            <div class="review-card-stars">${stars}</div>
+                            <span class="review-card-date">${date}</span>
+                        </div>
+                        <p class="review-card-comment">${review.comment}</p>
+                        <div class="review-card-author">
+                            <span class="review-author-name">— ${review.reviewer_name}</span>
+                        </div>
+                    </article>
+                `;
+            }).join('');
+        }
+
+        loadReviews();
+    </script>
+</body>
+
+</html>

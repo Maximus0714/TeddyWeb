@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="TedBud - Premium handcrafted teddy bears for your soul. Aesthetic, soothing, and timeless.">
+    <title>TedBud | Premium Teddy Bears</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+        rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Inline critical style for loader */
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #1a1a1a;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: var(--color-orange);
+            font-family: var(--font-heading);
+            transition: opacity 0.5s ease;
+        }
+
+        .loader-brand {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            color: var(--color-orange);
+            font-weight: 700;
+            margin-bottom: 20px;
+            opacity: 0;
+            /* Hidden initially for GSAP */
+            transform: translateY(20px);
+        }
+
+        .loader-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            color: var(--color-cream);
+            opacity: 0.8;
+            margin-bottom: 30px;
+            min-height: 1.5em;
+            letter-spacing: 0.5px;
+        }
+
+        .loader-progress-container {
+            width: 280px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            position: relative;
+        }
+
+        #loader-progress-bar {
+            width: 0%;
+            height: 100%;
+            background: var(--color-orange);
+            position: absolute;
+            top: 0;
+            left: 0;
+            transition: width 0.1s linear;
+        }
+
+        /* Tiny Bear Icon */
+        .progress-bear-svg {
+            position: absolute;
+            right: -20px;
+            bottom: 6px;
+            width: 40px;
+            height: 40px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+        }
+    </style>
+</head>
+
+<body>
+    <div id="loader">
+        <!-- Typography Loader -->
+        <h1 class="loader-brand">TedBud.</h1>
+
+        <div id="loader-text" class="loader-text">Waking up the bears...</div>
+
+        <div class="loader-progress-container">
+            <div id="loader-progress-bar">
+                <!-- Tiny Matching Bear Icon -->
+                <svg class="progress-bear-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="25" cy="25" r="10" fill="#D29F58" stroke="#3E2723" stroke-width="2" />
+                    <circle cx="75" cy="25" r="10" fill="#D29F58" stroke="#3E2723" stroke-width="2" />
+                    <ellipse cx="50" cy="70" rx="30" ry="25" fill="#D29F58" stroke="#3E2723" stroke-width="2" />
+                    <circle cx="50" cy="40" r="28" fill="#D29F58" stroke="#3E2723" stroke-width="2" />
+                    <ellipse cx="50" cy="48" rx="12" ry="10" fill="#FFF8E1" />
+                    <circle cx="50" cy="44" r="3" fill="#3E2723" />
+                    <circle cx="40" cy="38" r="3" fill="#3E2723" />
+                    <circle cx="60" cy="38" r="3" fill="#3E2723" />
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <header id="header" class="header">
+        <div class="container header-container">
+            <a href="#" class="logo">TedBud.</a>
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li><a href="index.html#features" class="nav-link">Craftsmanship</a></li>
+                    <li><a href="index.html#testimonials" class="nav-link">Stores</a></li>
+                    <li class="auth-unauthenticated"><a href="login.html" class="button button-secondary">Login</a></li>
+                    <li class="auth-unauthenticated"><a href="register.html" class="button button-primary">Register</a>
+                    </li>
+
+                    <!-- Authenticated Dropdown -->
+                    <li class="auth-authenticated profile-dropdown-container"
+                        style="display: none; position: relative;">
+                        <button class="button button-secondary profile-btn" id="nav-user-btn"
+                            style="display: flex; align-items: center; gap: 8px; padding-right: 16px;">
+                            <span id="nav-user-name">Profile</span>
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M6 9l6 6 6-6" />
+                            </svg>
+                        </button>
+                        <div class="profile-dropdown-content"
+                            style="display: none; position: absolute; top: 110%; right: 0; background: var(--color-dark-lighter); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--border-radius); padding: var(--spacing-xs); min-width: 150px; flex-direction: column; gap: 4px; z-index: 100;">
+                            <button id="logout-btn" class="button button-secondary"
+                                style="width: 100%; text-align: left; border: none; padding: 8px 16px;">Logout</button>
+                        </div>
+                    </li>
+
+                    <!-- Cart Icon -->
+                    <li>
+                        <a href="cart.html" class="nav-link cart-link"
+                            style="display: flex; align-items: center; gap: 8px;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="9" cy="21" r="1"></circle>
+                                <circle cx="20" cy="21" r="1"></circle>
+                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                            </svg>
+                            <span class="cart-count"
+                                style="background: var(--color-orange); color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: bold;">0</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Video Hero Section matches plan -->
+        <section id="hero" class="hero-sequence-container">
+            <div class="hero-sticky">
+                <video id="hero-video" autoplay muted loop playsinline>
+                    <source src="video/Smooth_cinematic_transition_1080p_2026020101.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <div class="hero-content-overlay">
+                    <div class="hero-buttons">
+                        <a href="shop.html" class="button-primary big-btn">Adopt a Buddy</a>
+                    </div>
+                </div>
+
+                <div class="scroll-indicator">
+                    <p>Scroll to Explore</p>
+                    <div class="scroll-arrow">↓</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="features section">
+            <div class="container">
+                <div class="section-header center-text">
+                    <h2 class="section-title">Designed for <span class="text-gradient">Comfort</span></h2>
+                    <p class="section-subtitle">Every stitch tells a story of quality and care.</p>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🧵</div>
+                        <h3 class="feature-title">Artisan Craftsmanship</h3>
+                        <p class="feature-desc">Sewn by master artisans using traditional techniques that ensure easier
+                            repair and longevity.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">☁️</div>
+                        <h3 class="feature-title">Cloud-Soft Fill</h3>
+                        <p class="feature-desc">Filled with our proprietary hypoallergenic eco-cloud stuffing for the
+                            perfect hug density.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🎨</div>
+                        <h3 class="feature-title">Timeless Aesthetic</h3>
+                        <p class="feature-desc">Minimalist designs that fit modern interiors. A teddy bear that looks
+                            good on your sofa.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="quote-section section">
+            <div class="container">
+                <blockquote class="quote fade-in">
+                    Softness is not just a feeling, it's an emotion. TedBud captures that emotion perfectly.
+                </blockquote>
+            </div>
+        </section>
+
+        <section id="testimonials" class="testimonials section alternate-bg">
+            <div class="container">
+                <div class="section-header center-text">
+                    <h2 class="section-title">Loved by <span class="highlight">Everyone</span></h2>
+                </div>
+                <div class="testimonials-grid">
+                    <div class="testimonial-card">
+                        <p class="testimonial-text">"I never knew a teddy bear could elevate my living room decor. It's
+                            so soft and looks incredibly premium."</p>
+                        <div class="testimonial-author">
+                            <span class="author-name">Jairus J.</span>
+                            <span class="author-role">Interior Designer</span>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <p class="testimonial-text">"The perfect gift for my partner. The unboxing experience was
+                            magical, and the bear itself is perfect."</p>
+                        <div class="testimonial-author">
+                            <span class="author-name">Sarvesh N.</span>
+                            <span class="author-role">Verified Buyer</span>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <p class="testimonial-text">"Soothing is the right word. Holding my TedBud after a long
+                            stressful day actually helps me relax."</p>
+                        <div class="testimonial-author">
+                            <span class="author-name">Dhaval T.</span>
+                            <span class="author-role">Yoga Instructor</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="cta" class="cta-section section">
+            <div class="container cta-container">
+                <h2 class="cta-title">Ready to meet your new best friend?</h2>
+                <p class="cta-subtitle">Limited batches released monthly to ensure quality.</p>
+
+                <p class="cta-attraction-text"
+                    style="color: var(--color-orange); font-family: 'Playfair Display', serif; font-size: 1.2rem; margin-bottom: 25px; margin-top: 10px;">
+                    Experience the hug that melts stress away.
+                </p>
+
+                <a href="shop.html" class="button button-primary big-btn glow-effect">Adopt Your TedBud</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-col">
+                <a href="#" class="logo footer-logo">TedBud.</a>
+                <p>Bringing warmth, one hug at a time.</p>
+            </div>
+            <div class="footer-links">
+                <a href="shop.html">Shop</a>
+                <a href="about.html">About</a>
+                <a href="care-guide.html">Care Guide</a>
+                <a href="contact.html">Contact</a>
+                <a href="reviews.html">Reviews</a>
+            </div>
+            <!-- Old socials replaced by Logo Loop below -->
+        </div>
+
+        <!-- Logo Loop Section (Socials) -->
+        <div class="logo-loop-section">
+            <div class="logo-loop-track" id="logoLoopTrack">
+                <!-- Items will be duplicated by JS for infinite loop -->
+                <a href="#" class="loop-item"><img src="images/logos/github.svg" alt="GitHub" class="loop-logo"></a>
+                <a href="#" class="loop-item"><img src="images/logos/twitter.svg" alt="Twitter" class="loop-logo"></a>
+                <a href="#" class="loop-item"><img src="images/logos/instagram.svg" alt="Instagram"
+                        class="loop-logo"></a>
+                <a href="#" class="loop-item"><img src="images/logos/facebook.svg" alt="Facebook" class="loop-logo"></a>
+            </div>
+        </div>
+
+        <div class="container footer-content" style="display: none;">
+            <!-- Hidden original footer content container closing div proxy -->
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; <span id="year">2026</span> TedBud Co. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script type="module" src="script.js"></script>
+</body>
+
+</html>
