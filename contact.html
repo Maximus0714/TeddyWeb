@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Contact TedBud - We'd love to hear from you.">
+    <title>Contact Us | TedBud</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+        rel="stylesheet">
+    <!-- GSAP & Lenis -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/TextPlugin.min.js"></script>
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .contact-form {
+            max-width: 500px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            text-align: left;
+        }
+
+        .form-label {
+            color: var(--color-text-main);
+            font-size: 0.9rem;
+        }
+
+        .form-input,
+        .form-textarea {
+            background-color: var(--color-dark-lighter);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 12px;
+            border-radius: var(--border-radius);
+            color: var(--color-white);
+            font-family: var(--font-body);
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--color-orange);
+        }
+    </style>
+</head>
+
+<body>
+    <header id="header" class="header solid-header">
+        <div class="container header-container">
+            <a href="index.html" class="logo">TedBud.</a>
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li><a href="index.html#features" class="nav-link">Craftsmanship</a></li>
+                    <li><a href="shop.html" class="button button-primary">Shop Now</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="section center-text" style="padding-top: 150px;">
+            <div class="container">
+                <h1 class="hero-title" style="color: var(--color-beige); margin-bottom: var(--spacing-md);">Get in Touch
+                </h1>
+                <p class="hero-subtitle"
+                    style="color: var(--color-text-muted); max-width: 700px; margin: 0 auto; margin-bottom: 40px;">
+                    Have a question or just want to say hi? We're all ears.
+                </p>
+
+                <div class="contact-form">
+                    <div class="form-group">
+                        <label class="form-label">Name</label>
+                        <input type="text" class="form-input" placeholder="Your Name">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-input" placeholder="hello@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Message</label>
+                        <textarea class="form-textarea" rows="5" placeholder="Tell us something nice..."></textarea>
+                    </div>
+                    <button class="button button-primary big-btn" style="width: 100%;">Send Message</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-col">
+                <a href="index.html" class="logo footer-logo">TedBud.</a>
+                <p>Bringing warmth, one hug at a time.</p>
+            </div>
+            <div class="footer-links">
+                <a href="shop.html">Shop</a>
+                <a href="about.html">About</a>
+                <a href="care-guide.html">Care Guide</a>
+                <a href="contact.html">Contact</a>
+            </div>
+            <!-- Old socials replaced by Logo Loop below -->
+        </div>
+
+        <!-- Logo Loop Section (Socials) -->
+        <div class="logo-loop-section">
+            <div class="logo-loop-track" id="logoLoopTrack">
+                <!-- Items will be duplicated by JS for infinite loop -->
+                <a href="#" class="loop-item"><img src="images/logos/github.svg" alt="GitHub" class="loop-logo"></a>
+                <a href="#" class="loop-item"><img src="images/logos/twitter.svg" alt="Twitter" class="loop-logo"></a>
+                <a href="#" class="loop-item"><img src="images/logos/instagram.svg" alt="Instagram"
+                        class="loop-logo"></a>
+                <a href="#" class="loop-item"><img src="images/logos/facebook.svg" alt="Facebook" class="loop-logo"></a>
+            </div>
+        </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span id="year">2026</span> TedBud Co. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script type="module" src="script.js"></script>
+</body>
+
+</html>
