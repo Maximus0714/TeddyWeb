@@ -973,4 +973,108 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // --- Password Reset Logic ---
+    const resetRequestForm = document.getElementById('reset-request-form');
+    if (resetRequestForm) {
+        resetRequestForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('reset-email').value;
+            const btn = resetRequestForm.querySelector('button');
+            const msgEl = document.getElementById('reset-request-msg');
+            
+            btn.textContent = 'Sending...';
+            btn.style.opacity = '0.8';
+            btn.disabled = true;
+
+            console.log('Attempting password reset for:', email);
+            console.log('Redirect URL:', `${window.location.origin}/update-password.html`);
+            
+            const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+                redirectTo: `${window.location.origin}/update-password.html`,
+            });
+
+            console.log('Reset response data:', data);
+            console.log('Reset response error:', error);
+            
+            btn.textContent = 'Send Reset Link';
+            btn.style.opacity = '1';
+            btn.disabled = false;
+            
+            msgEl.style.display = 'block';
+            if (error) {
+                msgEl.style.color = '#ff4d4f'; 
+                msgEl.textContent = `Error: ${error.message}`;
+                console.error('Reset error details:', JSON.stringify(error));
+            } else {
+                msgEl.style.color = '#4CAF50'; 
+                msgEl.textContent = 'Check your email for the reset link!';
+            }
+        });
+    }
+
+    const updatePasswordForm = document.getElementById('update-password-form');
+    if (updatePasswordForm) {
+        
+        // Supabase sends the user back with an access token in the URL hash.
+        // We need to listen for the PASSWORD_RECOVERY event to know they arrived from an email.
+        supabase.auth.onAuthStateChange(async (event, session) => {
+            if (event === 'PASSWORD_RECOVERY') {
+                // The user is now temporarily logged in so they can update their password
+                console.log("Password recovery mode active.");
+            }
+        });
+
+        // Check if we arrived here with an error in the hash
+        const hash = window.location.hash;
+        if (hash && hash.includes('error_description')) {
+            const params = new URLSearchParams(hash.substring(1));
+            const msgEl = document.getElementById('update-pwd-msg');
+            msgEl.style.display = 'block';
+            msgEl.style.color = '#ff4d4f';
+            msgEl.textContent = decodeURIComponent(params.get('error_description').replace(/\+/g, ' '));
+        }
+
+        updatePasswordForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const newPassword = document.getElementById('new-password').value;
+            const btn = updatePasswordForm.querySelector('button');
+            const msgEl = document.getElementById('update-pwd-msg');
+            
+            // Re-use existing validation if it's available in scope
+            if (typeof validatePassword === 'function' && !validatePassword(newPassword)) {
+                msgEl.style.display = 'block';
+                msgEl.style.color = '#ff4d4f';
+                msgEl.innerHTML = 'Password must contain:<br>- At least one uppercase letter<br>- At least one number<br>- At least one special character';
+                return;
+            }
+            
+            btn.textContent = 'Updating...';
+            btn.style.opacity = '0.8';
+            btn.disabled = true;
+            
+            // The user must be authenticated (which they are via the hash token) to update their password
+            const { error } = await supabase.auth.updateUser({ password: newPassword });
+            
+            btn.textContent = 'Update Password';
+            btn.style.opacity = '1';
+            btn.disabled = false;
+            
+            msgEl.style.display = 'block';
+            if (error) {
+                msgEl.style.color = '#ff4d4f';
+                msgEl.textContent = `Error: ${error.message}`;
+            } else {
+                msgEl.style.color = '#4CAF50';
+                msgEl.textContent = 'Password updated successfully! Redirecting to login...';
+                
+                // Sign them out so they have to log in with the new password (optional but good practice)
+                await supabase.auth.signOut();
+                
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 2000);
+            }
+        });
+    }
+
 }); // Close DOMContentLoaded
