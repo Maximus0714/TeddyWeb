@@ -34,3 +34,26 @@ $$ language plpgsql security definer;
 create trigger on_auth_user_created
   after insert on auth.users
   for each row execute procedure public.handle_new_user();
+
+-- ==========================================
+-- Reviews Table
+-- ==========================================
+create table reviews (
+  id uuid default gen_random_uuid() primary key,
+  user_id uuid references auth.users(id) on delete cascade not null,
+  reviewer_name text not null,
+  rating integer not null check (rating >= 1 and rating <= 5),
+  comment text not null,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+-- Turn on Row Level Security
+alter table reviews enable row level security;
+
+-- Everyone can read reviews
+create policy "Reviews are viewable by everyone." on reviews
+  for select using (true);
+
+-- Authenticated users can insert their own review
+create policy "Users can insert their own review." on reviews
+  for insert with check (auth.uid() = user_id);
