@@ -15,7 +15,8 @@ const razorpay = new Razorpay({
 });
 
 // Endpoint to create an order
-app.post('/create-order', async (req, res) => {
+// Notice we accept BOTH /create-order AND /api/create-order just in case
+app.post(['/create-order', '/api/create-order'], async (req, res) => {
     try {
         const { amount, currency = 'INR', receipt } = req.body;
 
@@ -47,7 +48,7 @@ app.post('/create-order', async (req, res) => {
 });
 
 // Endpoint to verify payment signature
-app.post('/verify-payment', (req, res) => {
+app.post(['/verify-payment', '/api/verify-payment'], (req, res) => {
     try {
         const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
 
@@ -74,7 +75,13 @@ app.post('/verify-payment', (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-    console.log('Ensure you have your RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET set in the .env file.');
-});
+// Only start the server locally if this file is run directly (not consumed by Vercel)
+if (require.main === module) {
+    app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
+        console.log('Ensure you have your RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET set in the .env file.');
+    });
+}
+
+// Export the Express API for Vercel
+module.exports = app;

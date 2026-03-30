@@ -1104,7 +1104,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             try {
                 // 1. Create order on backend
-                const response = await fetch('http://localhost:3000/create-order', {
+                const API_BASE = window.location.hostname.includes('localhost') || window.location.hostname.includes('127.0.0.1') ? 'http://localhost:3000/api' : '/api';
+                const response = await fetch(`${API_BASE}/create-order`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ amount: totalAmount })
@@ -1139,7 +1140,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     handler: async function (response) {
                         try {
                             // 4. Verify payment with backend
-                            const verifyRes = await fetch('http://localhost:3000/verify-payment', {
+                            const verifyRes = await fetch(`${API_BASE}/verify-payment`, {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify({
