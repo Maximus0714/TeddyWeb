@@ -57,3 +57,34 @@ create policy "Reviews are viewable by everyone." on reviews
 -- Authenticated users can insert their own review
 create policy "Users can insert their own review." on reviews
   for insert with check (auth.uid() = user_id);
+
+-- ==========================================
+-- Orders Table
+-- ==========================================
+create table orders (
+  id uuid default gen_random_uuid() primary key,
+  user_id uuid references auth.users(id) on delete cascade not null,
+  razorpay_order_id text unique,
+  razorpay_payment_id text unique,
+  total_amount numeric not null,
+  currency text default 'USD' not null,
+  status text default 'pending' check (status in ('pending', 'paid', 'failed')),
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+-- Turn on Row Level Security
+alter table orders enable row level security;
+
+-- Users can only read their own orders
+create policy "Users can view own orders." on orders
+  for select using (auth.uid() = user_id);
+
+-- Wait, creating an order will be done via server role (using service_role key) 
+-- OR if we do it from frontend before calling Razorpay, users would insert.
+-- We'll allow users to insert their pending orders.
+create policy "Users can insert own orders." on orders
+  for insert with check (auth.uid() = user_id);
+
+-- Users can update own orders (e.g. status)
+create policy "Users can update own orders." on orders
+  for update using (auth.uid() = user_id);

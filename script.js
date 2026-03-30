@@ -1,4 +1,4 @@
-import { supabase } from './supabase-config.js';
+import { supabase } from './supabase-config.js?v=2';
 
 document.addEventListener('DOMContentLoaded', () => {
     // --- Auth State Global UI Update ---
@@ -1073,6 +1073,127 @@ document.addEventListener('DOMContentLoaded', () => {
                 setTimeout(() => {
                     window.location.href = 'login.html';
                 }, 2000);
+            }
+        });
+    }
+
+    // --- Razorpay Checkout Logic ---
+    const checkoutBtn = document.getElementById('checkout-btn');
+    if (checkoutBtn) {
+        checkoutBtn.addEventListener('click', async () => {
+            const cart = getCart();
+            if (cart.length === 0) {
+                alert("Your bag is empty!");
+                return;
+            }
+
+            // Ensure user is logged in
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) {
+                alert("Please log in to checkout.");
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            
+            const originalText = checkoutBtn.textContent;
+            checkoutBtn.textContent = 'Processing...';
+            checkoutBtn.style.opacity = '0.8';
+            checkoutBtn.disabled = true;
+
+            try {
+                // 1. Create order on backend
+                const response = await fetch('http://localhost:3000/create-order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ amount: totalAmount })
+                });
+                
+                const data = await response.json();
+                
+                if (!data.success) {
+                    throw new Error(data.message || 'Failed to create order');
+                }
+
+                // 2. Insert pending order in Supabase
+                const { error: dbError } = await supabase
+                    .from('orders')
+                    .insert([{
+                        user_id: session.user.id,
+                        total_amount: totalAmount,
+                        razorpay_order_id: data.orderId,
+                        status: 'pending'
+                    }]);
+
+                if (dbError) throw dbError;
+
+                // 3. Initialize Razorpay Checkout
+                const options = {
+                    key: data.keyId, // Key fetched from backend
+                    amount: data.amount,
+                    currency: data.currency,
+                    name: "TedBud",
+                    description: "Your Buddy Bag Order",
+                    order_id: data.orderId,
+                    handler: async function (response) {
+                        try {
+                            // 4. Verify payment with backend
+                            const verifyRes = await fetch('http://localhost:3000/verify-payment', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    razorpay_order_id: response.razorpay_order_id,
+                                    razorpay_payment_id: response.razorpay_payment_id,
+                                    razorpay_signature: response.razorpay_signature
+                                })
+                            });
+
+                            const verifyData = await verifyRes.json();
+                            
+                            if (verifyData.success) {
+                                // 5. Update order status in Supabase
+                                await supabase
+                                    .from('orders')
+                                    .update({ status: 'paid', razorpay_payment_id: response.razorpay_payment_id })
+                                    .eq('razorpay_order_id', response.razorpay_order_id);
+
+                                // Clear cart
+                                saveCart([]);
+                                if (typeof renderCart !== 'undefined') renderCart();
+                                
+                                alert("Payment successful! Your buddy is on the way.");
+                                window.location.href = 'shop.html';
+                            } else {
+                                alert("Payment verification failed.");
+                            }
+                        } catch (err) {
+                            console.error('Verification error:', err);
+                            alert('Payment successful, but verification failed.');
+                        }
+                    },
+                    prefill: {
+                        name: session.user.user_metadata?.full_name || '',
+                        email: session.user.email || ''
+                    },
+                    theme: {
+                        color: "#fa8112"
+                    }
+                };
+                
+                const rzp = new window.Razorpay(options);
+                rzp.on('payment.failed', function (response){
+                    alert("Payment failed: " + response.error.description);
+                });
+                rzp.open();
+                
+            } catch (err) {
+                console.error("Checkout error:", err);
+                alert("Checkout error: " + err.message);
+            } finally {
+                checkoutBtn.textContent = originalText;
+                checkoutBtn.style.opacity = '1';
+                checkoutBtn.disabled = false;
             }
         });
     }
