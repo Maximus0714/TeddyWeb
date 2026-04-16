@@ -9,6 +9,9 @@ app.use(express.json());
 const createOrder = require('./api/create-order');
 const verifyPayment = require('./api/verify-payment');
 
+// Serve static files from the root directory
+app.use(express.static(__dirname));
+
 // Mount Vercel Serverless Functions into Express for local development
 app.post('/api/create-order', (req, res) => createOrder(req, res));
 app.post('/api/verify-payment', (req, res) => verifyPayment(req, res));

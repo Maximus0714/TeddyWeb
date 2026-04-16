@@ -155,7 +155,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const loader = document.getElementById('loader');
 
     if (loader) {
-        const progressBar = document.getElementById('loader-progress-bar');
+        if (sessionStorage.getItem('tedbud_loader_shown') === 'true') {
+            loader.remove();
+            if (heroOverlay && scrollIndicator) {
+                gsap.set([heroOverlay, scrollIndicator], { autoAlpha: 1, y: 0 });
+            }
+        } else {
+            sessionStorage.setItem('tedbud_loader_shown', 'true');
+
+            const progressBar = document.getElementById('loader-progress-bar');
         const loaderText = document.getElementById('loader-text');
         const loaderBear = document.getElementById('loader-bear');
 
@@ -240,6 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // If video takes way too long, force remove
         setTimeout(removeLoader, 4000);
+        }
     }
 
     // Fade out scroll indicator on scroll
@@ -284,15 +293,32 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Smooth Scroll for Anchors (Delegated to Lenis)
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    document.querySelectorAll('a[href*="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                lenis.scrollTo(target);
+            const href = this.getAttribute('href');
+            // If the link is for the current page (starts with # or index.html# when we are on index/root)
+            const isHomePage = window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('/');
+            
+            if (href.startsWith('#') || (isHomePage && href.startsWith('index.html#'))) {
+                e.preventDefault();
+                const targetHash = href.substring(href.indexOf('#'));
+                const target = document.querySelector(targetHash);
+                if (target) {
+                    lenis.scrollTo(target);
+                }
             }
         });
     });
+
+    // Auto-scroll on page load if URL has a hash (for cross-page navigation)
+    if (window.location.hash) {
+        const target = document.querySelector(window.location.hash);
+        if (target) {
+            setTimeout(() => {
+                lenis.scrollTo(target, { duration: 1.5 });
+            }, 300);
+        }
+    }
 
     // --- Feature Cards Spotlight Effect ---
     const featureCards = document.querySelectorAll('.feature-card');
@@ -1163,8 +1189,11 @@ document.addEventListener('DOMContentLoaded', () => {
                                 saveCart([]);
                                 if (typeof renderCart !== 'undefined') renderCart();
                                 
-                                alert("Payment successful! Your buddy is on the way.");
-                                window.location.href = 'shop.html';
+                                // Set session data for confirmation page
+                                sessionStorage.setItem('last_order_id', response.razorpay_order_id);
+                                sessionStorage.setItem('last_order_amount', totalAmount.toString());
+                                
+                                window.location.href = 'order-confirmation.html';
                             } else {
                                 alert("Payment verification failed.");
                             }

@@ -88,6 +88,11 @@
 </head>
 
 <body>
+    <script>
+        if (sessionStorage.getItem('tedbud_loader_shown') === 'true') {
+            document.write('<style>#loader { display: none !important; }</style>');
+        }
+    </script>
     <div id="loader">
         <!-- Cute Clapping Bear SVG -->
         <!-- Typography Loader -->
@@ -137,25 +142,36 @@
 
         <section class="section">
             <div class="container">
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <div class="feature-icon">🤝</div>
-                        <h3 class="feature-title">The Mission</h3>
-                        <p class="feature-desc">To create a companion that isn't just a toy, but a piece of home. We
-                            wanted to design the perfect hug.</p>
+                <!-- Inspiration Section -->
+                <div class="split-section">
+                    <div class="split-section-image">
+                        <img src="images/about_inspiration.png" alt="A magical teddy bear in a child's bedroom">
                     </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">🌱</div>
-                        <h3 class="feature-title">Sustainability</h3>
-                        <p class="feature-desc">Our eco-cloud filling is made from 100% recycled materials, and our
-                            fabrics are ethically sourced.</p>
+                    <div class="split-section-content">
+                        <h3>Our Inspiration</h3>
+                        <p>We started TedBud with a simple reflection: why did the toys of our childhood feel so much more magical? We wanted to recreate that profound coziness and nostalgia. Every stitch is designed not just to be looked at, but to be fiercely loved, held tight, and kept forever.</p>
+                        <p>A true companion provides a soft place to land at the end of every day.</p>
                     </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">🖐️</div>
-                        <h3 class="feature-title">Handmade</h3>
-                        <p class="feature-desc">Every TedBud is finished by hand, ensuring that no two bears are exactly
-                            alike. Unique, just like you.</p>
+                </div>
+
+                <!-- Personality Section -->
+                <div class="split-section">
+                    <div class="split-section-image">
+                        <img src="images/about_personality.png" alt="Three different colored teddy bears">
                     </div>
+                    <div class="split-section-content">
+                        <h3>A Bear For Every Personality</h3>
+                        <p>We believe that your TedBud should reflect who you are. That’s why we source the highest quality fabrics in a variety of emotional palettes. Whether you love the classic, vibrant orange, or the serene calm of sky blue—there is a bear patiently waiting to be your buddy.</p>
+                    </div>
+                </div>
+
+                <!-- Mission Banner -->
+                <div class="mission-banner">
+                    <div style="font-size: 2rem; margin-bottom: 5px;">🤝 🌱 🖐️</div>
+                    <h3 style="color: var(--color-dark);">Our Mission & Sustainability</h3>
+                    <p style="color: #4a4a4a; max-width: 800px; margin: 0 auto; font-weight: 500;">
+                        To create a companion that isn't just a toy, but a piece of home. Our eco-cloud filling is made from 100% recycled materials. Every TedBud is finished by hand, ethically sourced, and entirely unique. Just like you.
+                    </p>
                 </div>
             </div>
         </section>
@@ -180,6 +196,7 @@
                 <a href="about.html">About</a>
                 <a href="care-guide.html">Care Guide</a>
                 <a href="contact.html">Contact</a>
+                <a href="reviews.html">Reviews</a>
             </div>
             <!-- Old socials replaced by Logo Loop below -->
         </div>

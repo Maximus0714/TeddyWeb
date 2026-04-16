@@ -1734,4 +1734,247 @@ p {
     .star-rating-input {
         flex-wrap: wrap;
     }
+}/* --- About Page Redesign --- */
+.split-section {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+}
+
+.split-section:nth-child(even) {
+    flex-direction: row-reverse;
+}
+
+.split-section-image {
+    flex: 1;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.split-section-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.split-section-image:hover img {
+    transform: scale(1.05);
+}
+
+.split-section-content {
+    flex: 1;
+}
+
+.mission-banner {
+    background: linear-gradient(135deg, var(--color-orange), var(--color-beige));
+    padding: var(--spacing-lg);
+    border-radius: var(--border-radius);
+    text-align: center;
+    color: var(--color-dark);
+}
+
+/* --- Care Guide Redesign --- */
+.timeline-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.step-card {
+    background-color: var(--color-dark-lighter);
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius);
+    border-left: 5px solid var(--color-orange);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.step-card:hover {
+    transform: translateX(10px);
+    box-shadow: -10px 10px 30px rgba(0,0,0,0.5);
+}
+
+.step-number {
+    font-family: var(--font-heading);
+    font-size: 4rem;
+    font-weight: 700;
+    color: var(--color-orange);
+    opacity: 0.2;
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+.step-icon {
+    font-size: 2.5rem;
+    background: rgba(255,165,0,0.1);
+    width: 80px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* --- Contact Page Redesign --- */
+.contact-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-lg);
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+    .split-section {
+        flex-direction: column !important;
+    }
+    .contact-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+.contact-info-panel h3 {
+    color: var(--color-beige);
+}
+
+.faq-accordion details {
+    background: var(--color-dark-lighter);
+    margin-bottom: var(--spacing-xs);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+
+.faq-accordion summary {
+    padding: var(--spacing-sm);
+    cursor: pointer;
+    font-weight: 600;
+    list-style-type: none;
+    outline: none;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.faq-accordion summary::-webkit-details-marker {
+    display: none;
+}
+
+.faq-accordion details[open] summary {
+    color: var(--color-orange);
+}
+
+.faq-accordion .faq-content {
+    padding: 0 var(--spacing-sm) var(--spacing-sm) var(--spacing-sm);
+    color: var(--color-text-muted);
+}
+/* --- Order Confirmation Page --- */
+.order-confirmation-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: var(--spacing-xl) var(--spacing-sm);
+    text-align: center;
+}
+
+.success-icon-wrapper {
+    width: 100px;
+    height: 100px;
+    background-color: rgba(250, 129, 18, 0.1);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto var(--spacing-md);
+    position: relative;
+}
+
+.success-icon-wrapper::after {
+    content: '';
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 2px solid var(--color-orange);
+    animation: successPulse 2s infinite cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0;
+}
+
+@keyframes successPulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1.5);
+        opacity: 0;
+    }
+}
+
+.success-icon {
+    font-size: 3rem;
+    color: var(--color-orange);
+    /* Simple custom checkmark via border rotation */
+    width: 40px;
+    height: 20px;
+    border-left: 5px solid var(--color-orange);
+    border-bottom: 5px solid var(--color-orange);
+    transform: rotate(-45deg) translate(5px, -10px);
+}
+
+.order-details-card {
+    background-color: var(--color-dark-lighter);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-md);
+    margin-top: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+    text-align: left;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.order-details-row {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: var(--spacing-xs);
+    margin-bottom: var(--spacing-xs);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.order-details-row:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.order-details-row span:first-child {
+    color: var(--color-text-muted);
+}
+
+.order-details-row span:last-child {
+    color: var(--color-white);
+    font-weight: 500;
+}
+
+.delivery-estimate {
+    background-color: rgba(129, 212, 250, 0.05);
+    border-left: 4px solid #81D4FA;
+    padding: var(--spacing-sm);
+    border-radius: 4px;
+    margin-top: var(--spacing-md);
+    text-align: left;
+}
+
+.delivery-estimate p {
+    margin-bottom: 0;
+    font-size: 0.95rem;
+    color: #E1F5FE;
 }
